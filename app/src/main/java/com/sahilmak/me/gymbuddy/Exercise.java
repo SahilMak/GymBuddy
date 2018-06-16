@@ -5,15 +5,9 @@ import android.graphics.BitmapFactory;
 
 class Exercise {
     private String name;
-    private Bitmap image = null;
+    private Bitmap image;
     private String category;
-    String[] categoryList = {"Arms", "Back", "Chest", "Legs"};
     private String[] targets;
-    String[] targetsList = {"Abdominals", "Biceps", "Biking", "Calves", "Deltoids", "Gluteals",
-            "Hamstrings", "Hip Abductors", "Hip Adductors", "Latissimus Dorsi", "Obliques",
-            "Pectorals", "Quadriceps", "Rhomboids", "Running", "Spinal Erectors", "Teretes",
-            "Trapezius", "Tricep"};
-    private String note = "";
 
     public void setName(String name) {
         this.name = name;
@@ -29,9 +23,5 @@ class Exercise {
 
     public void setTargets(String[] targets) {
         this.targets = targets;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 }

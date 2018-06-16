@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_list">
+        <item>Category</item>
+        <item>Arms</item>
+        <item>Back</item>
+        <item>Chest</item>
+        <item>Legs</item>
+    </string-array>
+
+    <string-array name="targets_list">
+        <item>Abdominals</item>
+        <item>Biceps</item>
+        <item>Biking</item>
+        <item>Calves</item>
+        <item>Deltoids</item>
+        <item>Gluteals</item>
+        <item>Hamstrings</item>
+        <item>Hip Abductors</item>
+        <item>Hip Adductors</item>
+        <item>Latissimus Dorsi</item>
+        <item>Obliques</item>
+        <item>Pectorals</item>
+        <item>Quadriceps</item>
+        <item>Rhomboids</item>
+        <item>Running</item>
+        <item>Spinal Erectors</item>
+        <item>Teretes</item>
+        <item>Trapezius</item>
+        <item>Triceps</item>
+    </string-array>
+</resources>
