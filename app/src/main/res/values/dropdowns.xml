@@ -28,4 +28,10 @@
         <item>Trapezius</item>
         <item>Triceps</item>
     </string-array>
+
+    <string-array name="photo_menu">
+        <item>Take Photo</item>
+        <item>Upload Photo</item>
+        <item>Cancel</item>
+    </string-array>
 </resources>

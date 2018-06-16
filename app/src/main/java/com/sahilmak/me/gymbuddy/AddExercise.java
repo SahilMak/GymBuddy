@@ -1,13 +1,17 @@
 package com.sahilmak.me.gymbuddy;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +29,8 @@ public class AddExercise extends Fragment {
     Exercise exercise;
     String path;
     ImageView picture;
+    String[] pictureMenu;
+    String selection;
     TextInputEditText exerciseName;
     Spinner category;
     Button targetsBtn;
@@ -45,11 +51,37 @@ public class AddExercise extends Fragment {
         View view = inflater.inflate(R.layout.add_exercise, container, false);
         exercise = new Exercise();
 
+        pictureMenu = getResources().getStringArray(R.array.photo_menu);
         picture = view.findViewById(R.id.exerciseImage);
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Prompt user for image upload
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Add Photo");
+                builder.setItems(pictureMenu, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
+                        if (pictureMenu[i].equals("Take Photo")) {
+                            selection = "Take Photo";
+                            if (result == 0) {
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, 1);
+                            }
+                        } else if (pictureMenu[i].equals("Upload Photo")) {
+                            selection = "Upload Photo";
+                            if (result == 0) {
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select File"), 2);
+                            }
+                        } else if (pictureMenu[i].equals("Cancel")) {
+                            dialogInterface.dismiss();
+                        }
+                    }
+                });
+                builder.show();
                 path = "";
                 exercise.setImage(path);
             }

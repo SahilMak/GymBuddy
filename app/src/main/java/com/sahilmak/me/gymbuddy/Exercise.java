@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 
 class Exercise {
     private String name;
-    private Bitmap image;
+    private Bitmap image = null;
     private String category;
     private String[] targets;
 
