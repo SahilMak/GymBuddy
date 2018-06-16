@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category_list">
-        <item>Category</item>
         <item>Arms</item>
         <item>Back</item>
         <item>Chest</item>

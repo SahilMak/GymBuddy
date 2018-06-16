@@ -125,6 +125,10 @@ public class AddExercise extends Fragment {
                     Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (category.getSelectedItem().toString().equals("Category")) {
+                    Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 exercise.setName(exerciseName.getText().toString());
                 exercise.setCategory(category.getSelectedItem().toString());
