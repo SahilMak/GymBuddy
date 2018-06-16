@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddExercise extends Fragment {
     Exercise exercise;
@@ -30,7 +31,7 @@ public class AddExercise extends Fragment {
     TextView targetsText;
     String[] targets;
     boolean[] checkedTargets;
-    ArrayList selectedTargets = new ArrayList();
+    ArrayList<String> selectedTargets = new ArrayList<String>();
     FloatingActionButton createBtn;
 
     @Override
@@ -86,9 +87,33 @@ public class AddExercise extends Fragment {
                 builder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        exercise.setTargets((String[]) selectedTargets.toArray());
+                        // Display selected targets on screen
+                        StringBuilder item = new StringBuilder();
+                        for (String target : selectedTargets) {
+                            item.append(target).append("\n");
+                        }
+                        targetsText.setText(item.toString());
+                        // add targets to object
+                        exercise.setTargets(selectedTargets.toArray(new String[0]));
                     }
                 });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Reset", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Arrays.fill(checkedTargets, false);
+                        selectedTargets.clear();
+                        targetsText.setText("");
+                        targetsBtn.performClick();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
