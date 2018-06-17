@@ -42,18 +42,14 @@ public class AddExercise extends Fragment {
     Exercise exercise;
     ImageView picture;
     String[] pictureMenu;
-    String selection;
     TextInputEditText exerciseName;
     Spinner category;
     Button targetsBtn;
     TextView targetsText;
     String[] targets;
     boolean[] checkedTargets;
-    ArrayList<String> selectedTargets = new ArrayList<String>();
+    ArrayList<String> selectedTargets = new ArrayList<>();
     FloatingActionButton createBtn;
-    FirebaseDatabase database;
-    DatabaseReference databaseReference;
-    StorageReference storageReference;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -165,32 +161,29 @@ public class AddExercise extends Fragment {
             @Override
             public void onClick(View view) {
                 if (exerciseName.getText().toString().matches("")) {
-                    Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (category.getSelectedItem().toString().equals("Category")) {
-                    Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
+                    exerciseName.setError("Field cannot be left blank");
                     return;
                 }
                 exercise.setName(exerciseName.getText().toString());
                 exercise.setCategory(category.getSelectedItem().toString());
                 // Connect to database
-                database = FirebaseDatabase.getInstance();
-                databaseReference = database.getReference("exercise");
-                // Connect to storage
-                storageReference = FirebaseStorage.getInstance().getReference();
-                StorageReference exerciseReference = storageReference.child(exercise.getName() + ".jpg");
-                // Store exercise in database and storage
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReference = database.getReference("exercise");
                 databaseReference.setValue(exercise.getName());
                 databaseReference.setValue(exercise.getCategory());
                 databaseReference.setValue(exercise.getTargets());
-                UploadTask uploadTask = exerciseReference.putBytes(exercise.getImage());
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+                // Connect to storage
+                if (exercise.getImage() != null) {
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                    StorageReference exerciseReference = storageReference.child(exercise.getName() + ".jpg");
+                    UploadTask uploadTask = exerciseReference.putBytes(exercise.getImage());
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
                 // Notify user
                 Toast.makeText(getContext(), "Exercise successfully added!", Toast.LENGTH_LONG).show();
             }
@@ -245,11 +238,11 @@ public class AddExercise extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
                 // Place in ImageView
                 picture.setImageBitmap(bitmap);
                 // Save image in object
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
                 exercise.setImage(byteArrayOutputStream.toByteArray());
             }
         }
