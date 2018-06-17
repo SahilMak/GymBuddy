@@ -1,9 +1,12 @@
 package com.sahilmak.me.gymbuddy;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -22,12 +25,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AddExercise extends Fragment {
     Exercise exercise;
-    String path;
     ImageView picture;
     String[] pictureMenu;
     String selection;
@@ -62,28 +66,27 @@ public class AddExercise extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
-                        if (pictureMenu[i].equals("Take Photo")) {
+                        if (i == 0) {
                             selection = "Take Photo";
                             if (result == 0) {
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(intent, 1);
+                                startActivityForResult(intent, 0);
                             }
-                        } else if (pictureMenu[i].equals("Upload Photo")) {
+                        } else if (i == 1) {
                             selection = "Upload Photo";
                             if (result == 0) {
                                 Intent intent = new Intent();
                                 intent.setType("image/*");
                                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intent, "Select File"), 2);
+                                startActivityForResult(Intent.createChooser(intent, "Select File"), 1);
                             }
                         } else if (pictureMenu[i].equals("Cancel")) {
                             dialogInterface.dismiss();
                         }
                     }
+
                 });
                 builder.show();
-                path = "";
-                exercise.setImage(path);
             }
         });
 
@@ -168,6 +171,37 @@ public class AddExercise extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 0) {
+                // Compress image
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+                // Place in ImageView
+                picture.setImageBitmap(bitmap);
+                // Save image in object
+                exercise.setImage(bitmap);
+            } else if (requestCode == 1) {
+                Bitmap bitmap = null;
+                if (data != null) {
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                // Place in ImageView
+                picture.setImageBitmap(bitmap);
+                // Save image in object
+                exercise.setImage(bitmap);
+            }
+        }
     }
 
     @Override

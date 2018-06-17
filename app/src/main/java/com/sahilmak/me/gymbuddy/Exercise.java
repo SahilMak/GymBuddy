@@ -13,8 +13,8 @@ class Exercise {
         this.name = name;
     }
 
-    public void setImage(String pathName) {
-        this.image = BitmapFactory.decodeFile(pathName);
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
     public void setCategory(String category) {
