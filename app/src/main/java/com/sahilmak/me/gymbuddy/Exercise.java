@@ -6,24 +6,40 @@ import java.util.Arrays;
 import java.util.List;
 
 class Exercise {
-    String name;
-    Bitmap image = null;
-    String category;
-    List<String> targets;
+    private String name;
+    private byte[] image = null;
+    private String category;
+    private List<String> targets;
+
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setImage(Bitmap image) {
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
-    public void setTargets(ArrayList<String> targets) {
+    public List<String> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(List<String> targets) {
         this.targets = targets;
     }
 }

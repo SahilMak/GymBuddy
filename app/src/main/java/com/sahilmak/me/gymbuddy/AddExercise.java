@@ -26,8 +26,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,6 +51,9 @@ public class AddExercise extends Fragment {
     boolean[] checkedTargets;
     ArrayList<String> selectedTargets = new ArrayList<String>();
     FloatingActionButton createBtn;
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
+    StorageReference storageReference;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,10 +175,22 @@ public class AddExercise extends Fragment {
                 exercise.setName(exerciseName.getText().toString());
                 exercise.setCategory(category.getSelectedItem().toString());
                 // Connect to database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference databaseReference = database.getReference("exercise");
-                // Store exercise in database
-                databaseReference.setValue(exercise);
+                database = FirebaseDatabase.getInstance();
+                databaseReference = database.getReference("exercise");
+                // Connect to storage
+                storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference exerciseReference = storageReference.child(exercise.getName() + ".jpg");
+                // Store exercise in database and storage
+                databaseReference.setValue(exercise.getName());
+                databaseReference.setValue(exercise.getCategory());
+                databaseReference.setValue(exercise.getTargets());
+                UploadTask uploadTask = exerciseReference.putBytes(exercise.getImage());
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                    }
+                });
                 // Notify user
                 Toast.makeText(getContext(), "Exercise successfully added!", Toast.LENGTH_LONG).show();
             }
@@ -216,7 +235,7 @@ public class AddExercise extends Fragment {
                 // Place in ImageView
                 picture.setImageBitmap(bitmap);
                 // Save image in object
-                exercise.setImage(bitmap);
+                exercise.setImage(byteArrayOutputStream.toByteArray());
             } else if (requestCode == 1) {
                 Bitmap bitmap = null;
                 if (data != null) {
@@ -229,7 +248,9 @@ public class AddExercise extends Fragment {
                 // Place in ImageView
                 picture.setImageBitmap(bitmap);
                 // Save image in object
-                exercise.setImage(bitmap);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+                exercise.setImage(byteArrayOutputStream.toByteArray());
             }
         }
     }
