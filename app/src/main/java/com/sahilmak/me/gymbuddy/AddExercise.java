@@ -167,11 +167,9 @@ public class AddExercise extends Fragment {
                 exercise.setName(exerciseName.getText().toString());
                 exercise.setCategory(category.getSelectedItem().toString());
                 // Connect to database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference databaseReference = database.getReference("exercise");
-                databaseReference.setValue(exercise.getName());
-                databaseReference.setValue(exercise.getCategory());
-                databaseReference.setValue(exercise.getTargets());
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("exercise");
+                databaseReference.child(exercise.getName()).child("category").setValue(exercise.getCategory());
+                databaseReference.child(exercise.getName()).child("targets").setValue(exercise.getTargets());
                 // Connect to storage
                 if (exercise.getImage() != null) {
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -186,6 +184,8 @@ public class AddExercise extends Fragment {
                 }
                 // Notify user
                 Toast.makeText(getContext(), "Exercise successfully added!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 
