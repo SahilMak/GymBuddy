@@ -26,6 +26,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -127,7 +130,7 @@ public class AddExercise extends Fragment {
                         }
                         targetsText.setText(item.toString());
                         // add targets to object
-                        exercise.setTargets(selectedTargets.toArray(new String[0]));
+                        exercise.setTargets(selectedTargets);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -162,9 +165,15 @@ public class AddExercise extends Fragment {
                     Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 exercise.setName(exerciseName.getText().toString());
                 exercise.setCategory(category.getSelectedItem().toString());
+                // Connect to database
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReference = database.getReference("exercise");
+                // Store exercise in database
+                databaseReference.setValue(exercise);
+                // Notify user
+                Toast.makeText(getContext(), "Exercise successfully added!", Toast.LENGTH_LONG).show();
             }
         });
 
