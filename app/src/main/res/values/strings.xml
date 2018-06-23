@@ -15,4 +15,6 @@
     <string name="exercise_name">Name</string>
     <string name="exercise_image">Exercise Image</string>
     <string name="targets_button">Targets</string>
+    <string name="search_hint">Search exercises</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
 </resources>
