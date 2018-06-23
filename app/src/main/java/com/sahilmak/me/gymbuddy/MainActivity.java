@@ -9,14 +9,50 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private void search(String query) {
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<Exercise> searchResults = new ArrayList<>();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("exercise");
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
+        // Realtime search results
+        databaseReference.orderByKey().startAt(query);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +75,14 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.e("SEARCH", s);
+//                search(s);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                Log.e("SEARCH", s);
+//                search(s);
                 return false;
             }
         });
