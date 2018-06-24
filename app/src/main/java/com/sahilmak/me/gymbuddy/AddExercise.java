@@ -168,8 +168,9 @@ public class AddExercise extends Fragment {
                 exercise.setCategory(category.getSelectedItem().toString());
                 // Connect to database
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("exercise");
-                databaseReference.child(exercise.getName()).child("category").setValue(exercise.getCategory());
-                databaseReference.child(exercise.getName()).child("targets").setValue(exercise.getTargets());
+                databaseReference.child(exercise.getName().toLowerCase()).child("name").setValue(exercise.getName());
+                databaseReference.child(exercise.getName().toLowerCase()).child("category").setValue(exercise.getCategory());
+                databaseReference.child(exercise.getName().toLowerCase()).child("targets").setValue(exercise.getTargets());
                 // Connect to storage
                 if (exercise.getImage() != null) {
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference();

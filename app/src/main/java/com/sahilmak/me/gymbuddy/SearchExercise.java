@@ -81,13 +81,13 @@ public class SearchExercise extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                search(view, s);
+                search(view, s.toLowerCase());
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                search(view, s);
+                search(view, s.toLowerCase());
                 return true;
             }
         });

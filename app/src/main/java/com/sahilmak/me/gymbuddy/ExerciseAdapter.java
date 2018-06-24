@@ -49,7 +49,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
     public void onBindViewHolder(@NonNull ExerciseViewHolder viewHolder, int i) {
         if (exerciseList.get(i) != null) {
             Exercise exercise = exerciseList.get(i);
-            Log.d("SEARCH", "Exercise: " + exercise.getName());
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
             StorageReference exerciseReference = storageReference.child(exercise.getName() + ".jpg");
 
