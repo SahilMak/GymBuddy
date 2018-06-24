@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -30,11 +31,23 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    RecyclerView recyclerView;
+    List<Exercise> searchResults;
+    DatabaseReference databaseReference;
+    StorageReference storageReference;
+    ExerciseAdapter adapter;
 
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+//            searchResults.clear();
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Exercise exercise = snapshot.getValue(Exercise.class);
+                    searchResults.add(exercise);
+                }
+                adapter.notifyDataSetChanged();
+            }
         }
 
         @Override
@@ -43,15 +56,20 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    private void search(String query) {
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+    private void search(String search) {
+        recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<Exercise> searchResults = new ArrayList<>();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("exercise");
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        recyclerView.setHasFixedSize(true);
+        searchResults = new ArrayList<>();
+        databaseReference = FirebaseDatabase.getInstance().getReference("exercise");
+        storageReference = FirebaseStorage.getInstance().getReference();
+        adapter = new ExerciseAdapter(this, searchResults);
+        recyclerView.setAdapter(adapter);
 
         // Realtime search results
-        databaseReference.orderByKey().startAt(query);
+        Log.e("SEARCH", search);
+        Query query = databaseReference.orderByKey().startAt(search);
+        query.addListenerForSingleValueEvent(valueEventListener);
     }
 
     @Override
@@ -74,16 +92,14 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Log.e("SEARCH", s);
-//                search(s);
-                return false;
+                search(s);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                Log.e("SEARCH", s);
-//                search(s);
-                return false;
+                search(s);
+                return true;
             }
         });
     }
