@@ -3,6 +3,7 @@ package com.sahilmak.me.gymbuddy;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
@@ -45,16 +47,19 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
 
     @Override
     public void onBindViewHolder(@NonNull ExerciseViewHolder viewHolder, int i) {
-        Exercise exercise = exerciseList.get(i);
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        StorageReference exerciseReference = storageReference.child(exercise.getName() + ".jpg");
+        if (exerciseList.get(i) != null) {
+            Exercise exercise = exerciseList.get(i);
+            Log.d("SEARCH", "Exercise: " + exercise.getName());
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference exerciseReference = storageReference.child(exercise.getName() + ".jpg");
 
-        Glide.with(context).using(new FirebaseImageLoader()).load(exerciseReference).asBitmap().into(viewHolder.imageView);
-        viewHolder.textView.setText(exercise.getName());
+            Glide.with(context).using(new FirebaseImageLoader()).load(exerciseReference).into(viewHolder.imageView);
+            viewHolder.textView.setText(exercise.getName());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return exerciseList.size();
     }
 }

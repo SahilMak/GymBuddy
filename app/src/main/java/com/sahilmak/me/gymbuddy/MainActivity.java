@@ -9,69 +9,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    RecyclerView recyclerView;
-    List<Exercise> searchResults;
-    DatabaseReference databaseReference;
-    StorageReference storageReference;
-    ExerciseAdapter adapter;
-
-    ValueEventListener valueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            searchResults.clear();
-            if (dataSnapshot.exists()) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Exercise exercise = snapshot.getValue(Exercise.class);
-                    searchResults.add(exercise);
-                }
-                adapter.notifyDataSetChanged();
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
-
-    private void search(String search) {
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        searchResults = new ArrayList<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference("exercise");
-        storageReference = FirebaseStorage.getInstance().getReference();
-        adapter = new ExerciseAdapter(this, searchResults);
-        recyclerView.setAdapter(adapter);
-
-        // Realtime search results
-        Log.e("SEARCH", search);
-        Query query = databaseReference.orderByKey().startAt(search);
-        query.addListenerForSingleValueEvent(valueEventListener);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,20 +31,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        SearchView searchView = findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                search(s);
-                return true;
-            }
+        if (findViewById(R.id.fragment) != null) {
+            if (savedInstanceState != null)
+                return;
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                search(s);
-                return true;
-            }
-        });
+            SearchExercise searchExercise = new SearchExercise();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, searchExercise, null).commit();
+        }
     }
 
     @Override
@@ -146,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_profile) {
             // Profile view
         } else if (id == R.id.nav_log_workout) {
-            // TBD
+            fragment = new SearchExercise();
         } else if (id == R.id.nav_new_workout) {
             fragment = new AddExercise();
         } else if (id == R.id.nav_strength) {
@@ -156,8 +92,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (fragment != null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.content_main, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
