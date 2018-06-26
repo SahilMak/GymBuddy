@@ -44,7 +44,6 @@ public class SearchExercise extends Fragment {
             if (dataSnapshot.exists()) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Exercise exercise = snapshot.getValue(Exercise.class);
-                    exercise.setName(snapshot.getKey());
                     searchResults.add(exercise);
                 }
                 adapter.notifyDataSetChanged();
@@ -73,7 +72,7 @@ public class SearchExercise extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_search_exercise, container, false);
 
