@@ -74,7 +74,7 @@ public class SearchExercise extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_search_exercise, container, false);
+        final View view = inflater.inflate(R.layout.search_exercise, container, false);
 
         searchView = view.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

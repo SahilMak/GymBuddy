@@ -9,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class LogExercise extends Fragment {
+public class LogWorkout extends Fragment {
     TextView name;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_log_exercise, container, false);
+        View view = inflater.inflate(R.layout.log_workout, container, false);
 
         name = view.findViewById(R.id.log_name);
         Bundle args = getArguments();
