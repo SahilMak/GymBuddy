@@ -17,4 +17,8 @@
     <string name="targets_button">Targets</string>
     <string name="search_hint">Search exercises</string>
     <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="weight">Weight:</string>
+    <string name="lbs">lbs</string>
+    <string name="sets">Sets:</string>
+    <string name="reps">Reps:</string>
 </resources>

@@ -6,16 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".LogWorkout">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/createExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_check_white"
+        app:backgroundTint="@android:color/holo_green_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <ImageView
         android:id="@+id/logImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="24dp"
+        android:contentDescription="@string/exercise_image"
         android:src="@android:color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/exercise_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/logName"
@@ -26,4 +38,103 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logImage" />
+
+    <TextView
+        android:id="@+id/logCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/logTargets"
+        app:layout_constraintTop_toBottomOf="@+id/logName" />
+
+    <TextView
+        android:id="@+id/logTargets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintLeft_toRightOf="@+id/logCategory"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logName" />
+
+    <TextView
+        android:id="@+id/weightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weight"
+        app:layout_constraintBottom_toBottomOf="@+id/weightInputLayout"
+        app:layout_constraintHorizontal_bias="0.895"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/weightInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/logTargets" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/weightInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="84dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logTargets">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/weightInput"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/lbs" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/setsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/sets"
+        app:layout_constraintBottom_toBottomOf="@+id/setsInputLayout"
+        app:layout_constraintHorizontal_bias="0.895"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/setsInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/weightLabel"
+        app:layout_constraintTop_toTopOf="@+id/setsInputLayout" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/setsInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintLeft_toLeftOf="@+id/weightInputLayout"
+        app:layout_constraintRight_toRightOf="@+id/weightInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/weightInputLayout">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/setsInput"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/repsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reps"
+        app:layout_constraintBottom_toBottomOf="@+id/repsInputLayout"
+        app:layout_constraintHorizontal_bias="0.895"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/repsInputLayout"
+        app:layout_constraintTop_toTopOf="@+id/repsInputLayout" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/repsInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintLeft_toLeftOf="@+id/setsInputLayout"
+        app:layout_constraintRight_toRightOf="@+id/setsInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/setsInputLayout">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/repsInput"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
 </android.support.constraint.ConstraintLayout>
